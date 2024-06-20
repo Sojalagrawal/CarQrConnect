@@ -51,30 +51,29 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 
-const fetchChats=asyncHandler(async(req,res)=>{
-  try{
-    Chat.find({
-      $and:[
-        {user2:req.user._id},
-        {user2Type:"User"}
-      ]
-    })
-    .populate("user1","phnNo")
-    .populate("user2","phnNo")
-    .populate("latestMessage")
-    .sort({updatedAt:-1})
-    .then(async(results)=>{
-      results=await Chat.populate(results,{
-        path:"latestMessage.sender",
-        select:"phnNo"
-      });
 
-      res.status(200).send(results);
+const fetchChats = asyncHandler(async (req, res) => {
+  try {
+    Chat.find({
+      user2: req.user._id,
     })
-  }catch(error){
+      .populate("user1", "phnNo")
+      .populate("user2", "phnNo") // Ensure this line is included
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await Chat.populate(results, {
+          path: "latestMessage.sender",
+          select: "phnNo",
+        });
+
+        res.status(200).send(results);
+      });
+  } catch (error) {
     res.status(400);
     throw new Error(error.message);
   }
 });
+
 
 module.exports = { accessChat,fetchChats};

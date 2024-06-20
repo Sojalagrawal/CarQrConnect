@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Container, Box, Text,Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Login from '../components/Authentication/Login';
 import SignUp from '../components/Authentication/SignUp';
+import { useNavigate } from 'react-router-dom';
 
 const Homepage = () => {
+  const navigate=useNavigate();
   const marginCustom={
     base:"-8px",
     md:"0px",
     lg:"2px"
   };
+  useEffect(()=>{
+    const user=JSON.parse(localStorage.getItem("userInfo"));
+    if(user){
+      navigate("/chats");
+    }
+  },[navigate]);
  
   return (
     <Container maxW={{base:"md",md:"xl",lg:"2xl"}} centerContent  >
