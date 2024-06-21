@@ -24,7 +24,7 @@ export default function MyChats({fetchAgain}) {
 
       const data = await response.json();
       setChats(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error);
       toast({
@@ -42,6 +42,7 @@ export default function MyChats({fetchAgain}) {
     setLoggedUser(user);
     fetchChats();
   }, [fetchAgain]); 
+  
 
   return (
     <>

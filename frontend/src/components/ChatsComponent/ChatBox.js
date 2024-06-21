@@ -7,7 +7,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 
 
 
-export default function ChatBox({fetchAgain,setFetchAgain}) {
+export default function ChatBox({fetchAgain,toggleFetchAgain}) {
     const { selectedChat,setSelectedChat } = ChatState();
 
     return (
@@ -21,7 +21,7 @@ export default function ChatBox({fetchAgain,setFetchAgain}) {
         >
             {selectedChat?(
                 <>
-                        <IconButton display={{base:"flex",md:"none"}}
+                        <IconButton size="sm" display={{base:"flex",md:"none"}}
                             icon={<ArrowBackIcon/>}
                             onClick={()=>setSelectedChat("")}
                             alignSelf="flex-start"
@@ -30,7 +30,7 @@ export default function ChatBox({fetchAgain,setFetchAgain}) {
             ):(
                 <></>
             )}
-            <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>
+            <SingleChat fetchAgain={fetchAgain} toggleFetchAgain={toggleFetchAgain}/>
         </Box>
 
         //width="66%"

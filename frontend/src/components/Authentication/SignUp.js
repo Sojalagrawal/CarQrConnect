@@ -135,19 +135,19 @@ const SignUp = () => {
         <VStack spacing={{base: "1", md: "1.5", lg: "2"}} color="black">
             <FormControl id="first-name" isRequired fontSize={{base:"10px",md:"20px",lg:"30px"}}>
                 <FormLabel fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} m={marginCustom}>Name</FormLabel>
-                <Input type='text'  fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your name" onChange={(e)=>{setName(e.target.value)}} onKeyPress={handleKeyPress}/>
+                <Input type='text'  fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your name" onChange={(e)=>{setName(e.target.value)}} onKeyDown={handleKeyPress}/>
             </FormControl>
 
             <FormControl id="phnno" isRequired>
                 <FormLabel m={marginCustom} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} >Phone Number</FormLabel>
-                <Input type='number' fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your phone number" onChange={(e)=>{setPhnno(e.target.value)}} onKeyPress={handleKeyPress}/>
+                <Input type='number' fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your phone number" onChange={(e)=>{setPhnno(e.target.value)}} onKeyDown={handleKeyPress}/>
                 <FormHelperText m={marginCustom} fontSize={{ base:"11px", md: "14px", lg: "14px" ,xl:"15px"}}>Your privacy is our priority. Your phone number will remain confidential.</FormHelperText>
             </FormControl>
 
             <FormControl id="password" isRequired>
                 <FormLabel m={marginCustom} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}}>Password</FormLabel>
                 <InputGroup>
-                <Input type={show?'text':'password'} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your password" onChange={(e)=>{setPassword(e.target.value)}} onKeyPress={handleKeyPress}/>
+                <Input type={show?'text':'password'} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your password" onChange={(e)=>{setPassword(e.target.value)}} onKeyDown={handleKeyPress}/>
                 <InputRightElement width="9.5 rem">
                     <Button h="1.75rem" fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} size="sm" m={1} onClick={handleClick}>{show?"Hide":"Show"}</Button>
                 </InputRightElement>
@@ -157,7 +157,7 @@ const SignUp = () => {
             <FormControl id="confirmpassword" isRequired>
                 <FormLabel m={marginCustom} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}}>Confirm Password</FormLabel>
                 <InputGroup>
-                <Input type={showc?'text':'password'} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your confirm password" onChange={(e)=>{setConfirmpassword(e.target.value)}} onKeyPress={handleKeyPress}/>
+                <Input type={showc?'text':'password'} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your confirm password" onChange={(e)=>{setConfirmpassword(e.target.value)}} onKeyDown={handleKeyPress}/>
                 <InputRightElement width="9.5 rem">
                     <Button fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} h="1.75rem" size="sm" m={1} onClick={handleClick1}>{showc?"Hide":"Show"}</Button>
                 </InputRightElement>

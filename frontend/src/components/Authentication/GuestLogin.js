@@ -98,7 +98,7 @@ export default function GuestLogin() {
         
         <FormControl id="phno" isRequired>
             <FormLabel m={marginCustom} fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}}>Phone Number</FormLabel>
-            <Input type='number' fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your phone number" onChange={(e)=>{setPhnno(e.target.value)}} onKeyPress={handleKeyPress}/>
+            <Input type='number' fontSize={{ base:"12px", md: "15px", lg: "15px" ,xl:"16px"}} placeholder="Enter your phone number" onChange={(e)=>{setPhnno(e.target.value)}} onKeyDown={handleKeyPress}/>
             <FormHelperText m={marginCustom} fontSize={{ base:"11px", md: "14px", lg: "14px" ,xl:"15px"}}>Your privacy is our priority. Your phone number will remain confidential.</FormHelperText>
 
         </FormControl>

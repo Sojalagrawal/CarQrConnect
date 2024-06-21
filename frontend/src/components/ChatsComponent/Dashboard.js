@@ -9,6 +9,15 @@ export default function Dashboard() {
     const { user } = ChatState();
     const [fetchAgain,setFetchAgain]=useState(false);
 
+    const toggleFetchAgain=()=>{
+        if(fetchAgain){
+            setFetchAgain(false);
+        }
+        else{
+            setFetchAgain(true);
+        }
+    }
+
     return (
         <div style={{ width: "100%"}}>
             <Box border="1px solid red" bg="#BAC8D3">
@@ -22,7 +31,7 @@ export default function Dashboard() {
                    
                 >
                     {user && <MyChats fetchAgain={fetchAgain}/>}
-                    {user && <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>}
+                    {user && <ChatBox fetchAgain={fetchAgain} toggleFetchAgain={toggleFetchAgain}/>}
                 </Box>
             </Box>
         </div>
