@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TabIndicator, Box, Text, Tabs, TabList, TabPanels, Tab, TabPanel, Flex,useMediaQuery } from "@chakra-ui/react";
+import {  Box, Text, Tabs, TabList, TabPanels, Tab, TabPanel, Flex,useMediaQuery } from "@chakra-ui/react";
 import QrCode from '../components/Qr/QrCode';
 import Scanner from '../components/Qr/Scanner';
 import Dashboard from '../components/ChatsComponent/Dashboard';

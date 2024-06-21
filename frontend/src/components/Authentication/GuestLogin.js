@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+// import {useNavigate} from 'react-router-dom';
 
 import {VStack , FormControl,
     FormLabel,
@@ -8,8 +8,8 @@ import {VStack , FormControl,
     Input,useToast} from '@chakra-ui/react'
 
 
-export default function GuestLogin() {
-    const navigate=useNavigate();
+export default function GuestLogin({flag,setFlag}) {
+    // const navigate=useNavigate();
     const toast = useToast();
     const [phnno,setPhnno]=useState("");
     const [loading,setLoading]=useState(false);
@@ -73,7 +73,8 @@ export default function GuestLogin() {
             })
             localStorage.setItem("guestInfo",JSON.stringify(data));
             setLoading(false);
-            navigate("/guestchat");
+            setFlag(true);
+            // navigate("/guestchat");
         }
         catch(error){
             toast({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, useToast, Text, Spinner, Stack } from "@chakra-ui/react";
+import { Box, useToast, Text, Stack } from "@chakra-ui/react";
 import { ChatState } from '../../Context/ChatProvider';
 import { getSender } from "../../config/ChatLogic";
 

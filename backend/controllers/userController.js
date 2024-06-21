@@ -1,6 +1,7 @@
 const asyncHandler=require("express-async-handler");
 const User=require('../models/userModel');
 const bcrypt=require("bcryptjs");
+const CryptoJS =require( 'crypto-js');
 const generateToken=require("../config/generateToken")
 
 const registerUser=asyncHandler(async(req,res)=>{
@@ -53,4 +54,46 @@ const authUser=asyncHandler(async(req,res)=>{
         throw new Error("Invalid PhoneNo or Password");
     }
 });
-module.exports={registerUser,authUser};
+
+const encryptedId=asyncHandler(async(req,res)=>{
+    const {userId}=req.body;
+    const encryptedUserId = CryptoJS.AES.encrypt(userId.toString(), process.env.GUEST_KEY).toString();
+    if(encryptedUserId){
+        return res.status(200).json({encryptedUserId});
+    }
+    else {
+        res.status(400);
+        throw new Error("Failed to create guest");
+    }
+
+
+
+
+})
+
+const decryptedId=asyncHandler(async(req,res)=>{
+    const {encryptId}=req.body;
+    const decryptedData = CryptoJS.AES.decrypt(encryptId, process.env.GUEST_KEY).toString(CryptoJS.enc.Utf8);
+    if(decryptedData){
+        return res.status(200).json({decryptedData});
+    }
+    else {
+        res.status(400);
+        throw new Error("Failed to find User");
+    }
+})
+
+const checkUser=asyncHandler(async(req,res)=>{
+    const {userId}=req.body;
+    
+    const userExists=await User.findOne({_id:userId});
+    if(userExists){
+        res.status(200).json({userExists});
+    }
+    else{
+        res.status(400);
+        throw new Error("User Do not exists");
+    }
+})
+
+module.exports={registerUser,authUser,decryptedId ,encryptedId,checkUser};

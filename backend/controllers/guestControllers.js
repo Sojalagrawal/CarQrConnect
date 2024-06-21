@@ -33,4 +33,6 @@ const getGuest = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getGuest };
+
+
+module.exports = { getGuest};

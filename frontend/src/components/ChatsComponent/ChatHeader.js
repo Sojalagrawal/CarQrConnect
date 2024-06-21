@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text,Spacer,MenuButton ,Menu,MenuItem,MenuList,Button,Avatar, MenuDivider} from "@chakra-ui/react";
+import { Box,Spacer,MenuButton ,Menu,MenuItem,MenuList,Button,Avatar, MenuDivider} from "@chakra-ui/react";
 import {BellIcon,ChevronDownIcon} from '@chakra-ui/icons'
 import { ChatState } from "../../Context/ChatProvider";
 import Profile from '../miscellaneous/Profile';
