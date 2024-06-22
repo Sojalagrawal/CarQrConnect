@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, FormControl, Input, Spinner, Text, useToast } from "@chakra-ui/react";
+import { Box, FormControl,Divider, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import Picker,{ EmojiClickData } from 'emoji-picker-react';
 import ScrollableChat from './ScrollableChat';
 import io from "socket.io-client";
 
 
 const ENDPOINT="http://localhost:5000";
-var socket,selectedChatCompare;
+var socket;
 
 export default function SingleGuestChat({ selectedChat }) {
     const toast = useToast();
@@ -16,6 +16,8 @@ export default function SingleGuestChat({ selectedChat }) {
     const guestInfo = JSON.parse(localStorage.getItem("guestInfo"));
     const [showPicker,setShowPicker]=useState(false);
     const [socketConnected,setSocketConnected]=useState(false);
+    const [typing,setTyping]=useState(false);
+    const [istyping,setIsTyping]=useState(false);
 
 
 
@@ -58,18 +60,21 @@ export default function SingleGuestChat({ selectedChat }) {
         socket.emit('setup',guestInfo);
         socket.on("connected",()=>{
             setSocketConnected(true);
+            socket.on("typing",()=>{setIsTyping(true)});
+            socket.on("stop typing",()=>{setIsTyping(false)});
         })
     },[]);
 
     useEffect(() => {
         fetchAllMessages();
-        selectedChatCompare=selectedChat;
     }, [selectedChat]);
    
 
 
     const sendMessage = async () => {
         if (!newMessage.trim()) return;
+        socket.emit("stop typing",selectedChat._id);
+
 
         try {
             const response = await fetch("http://localhost:5000/api/message", {
@@ -113,8 +118,7 @@ export default function SingleGuestChat({ selectedChat }) {
 
     useEffect(()=>{
         socket.on("message recieved",(newMessageRecieved)=>{
-            setMessages([...messages,newMessageRecieved]);
-            
+            setMessages([...messages,newMessageRecieved]); 
         })
     })
 
@@ -127,6 +131,26 @@ export default function SingleGuestChat({ selectedChat }) {
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value);
+
+        if(!socketConnected){
+            return;
+        }
+
+        if(!typing){
+            setTyping(true);
+            socket.emit("typing",selectedChat._id);
+        }
+        let lastTypingTime=new Date().getTime();
+        var timerLength=2000;
+        setTimeout(() => {
+            var timeNow=new Date().getTime();
+            var timeDiff=timeNow-lastTypingTime;
+
+            if(timeDiff>=timerLength && typing){
+                socket.emit("stop typing",selectedChat._id);
+                setTyping(false);
+            }
+        }, timerLength);
     };
 
     const handleKeyPress = (e) => {
@@ -155,16 +179,19 @@ export default function SingleGuestChat({ selectedChat }) {
                         ) : (
                             <>
                             <Box display="flex" justifyContent="center" alignItems="center"><Text fontSize="30px" fontWeight="bold">Car Owner</Text></Box>
+                            <Divider borderColor="black" />
                             <div style={{ display: "flex", flexDirection: "column", overflowY: "scroll" }}>
                                 {messages.length > 0 && <ScrollableChat messages={messages} usedBy="Guest" />}
                             </div>
+                            {istyping?<div>Loading</div>:<></>}
                             </>
                         )}
                     </Box>
                     <Box w="100%" display="flex" alignItems="center" justifyContent="center" cursor="pointer">
-                    <Box onClick={()=>{setShowPicker(!showPicker)}} alignSelf="flex-end" ml={2}><span class="material-symbols-outlined">mood</span></Box>
-                    {showPicker && <Box position="absolute" bottom="10%" left={{base: "3%", md: "3%", lg: "1.5%"}}><Picker height={300} width={300} onEmojiClick={onEmojiClick}/></Box>}
+                        <Box onClick={()=>{setShowPicker(!showPicker)}} alignSelf="flex-end" ml={2}><span class="material-symbols-outlined">mood</span></Box>
+                        {showPicker && <Box position="absolute" bottom="10%" left={{base: "3%", md: "3%", lg: "1.5%"}}><Picker height={300} width={300} onEmojiClick={onEmojiClick}/></Box>}
                         <FormControl onKeyDown={handleKeyPress} isRequired mt={3} ml={4} w="98%">
+                            
                             <Input variant="filled" placeholder="Enter a message" onChange={typingHandler} value={newMessage}></Input>
                         </FormControl>
                         <Box alignSelf="flex-end" ml={2} onClick={sendMessage}>

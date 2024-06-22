@@ -32,3 +32,7 @@ export default function ScrollableChat({ messages, usedBy }) {
         </ScrollableFeed>
     );
 }
+
+
+//"#BEE3F8" : "#B9F5D0",
+// "aquamarine":"bisque",

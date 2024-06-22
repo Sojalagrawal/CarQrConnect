@@ -73,7 +73,7 @@ export default function MyChats({fetchAgain}) {
                   borderRadius="lg"
                 >
                   <Text fontWeight="bold"> Notifier</Text>
-                  <Text>{getSender(loggedUser, chat)} : {chat.latestMessage.content.substring(0,10)} {chat.latestMessage.content.length>10?"...":""}</Text>
+                  {loggedUser && <Text>{getSender(loggedUser, chat)} : {chat.latestMessage.content.substring(0,10)} {chat.latestMessage.content.length>10?"...":""}</Text>}
                 </Box>
               ))}
             </Stack>

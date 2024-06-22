@@ -96,7 +96,7 @@ const GuestChat = () => {
         borderRadius="lg"
         borderWidth="1px"
       >
-        <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#E8E8E8" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
+        <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#fae0de" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
            {selectedChat && selectedChat._id && <SingleGuestChat selectedChat={selectedChat}/>}
         </Box>
       </Box>:<Box display="flex" justifyContent="center" alignItems="center" h="100%">

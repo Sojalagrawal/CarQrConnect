@@ -17,6 +17,8 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     const [newMessage, setNewMessage] = useState("");
     const [showPicker,setShowPicker]=useState(false);
     const [socketConnected,setSocketConnected]=useState(false);
+    const [typing,setTyping]=useState(false);
+    const [istyping,setIsTyping]=useState(false);
 
     
 
@@ -58,6 +60,8 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
         socket.emit('setup',user);
         socket.on("connected",()=>{
             setSocketConnected(true);
+            socket.on("typing",()=>{setIsTyping(true)});
+            socket.on("stop typing",()=>{setIsTyping(false)});
         })
     },[]);
 
@@ -68,6 +72,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
 
     const sendMessage = async () => {
         if (!newMessage.trim()) return;
+        socket.emit("stop typing",selectedChat._id);
 
         try {
             const response = await fetch("http://localhost:5000/api/message", {
@@ -129,6 +134,27 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value);
+
+        if(!socketConnected){
+            return;
+        }
+
+        if(!typing){
+            setTyping(true);
+            socket.emit("typing",selectedChat._id);
+        }
+        let lastTypingTime=new Date().getTime();
+        var timerLength=3000;
+        setTimeout(() => {
+            var timeNow=new Date().getTime();
+            var timeDiff=timeNow-lastTypingTime;
+
+            if(timeDiff>=timerLength && typing){
+                socket.emit("stop typing",selectedChat._id);
+                setTyping(false);
+            }
+        }, timerLength);
+
     };
 
     const handleKeyPress = (e) => {
@@ -158,9 +184,12 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
                                 h={20}
                             />
                         ) : (
+                            <>
                             <div style={{display:"flex",flexDirection:"column",overflowY:"scroll"}}>
                                 <ScrollableChat messages={messages} usedBy="User" />
                             </div>
+                            {istyping?<div>Loading</div>:<></>}
+                            </>
                         )}
                     </Box>
                     <Box w="100%" display="flex" alignItems="center" justifyContent="center" cursor="pointer">
@@ -168,6 +197,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
                         {showPicker && <Box position="absolute" bottom="13%" left={{base: "5%", md: "5%", lg: "33.5%"}}><Picker height={300} width={300} onEmojiClick={onEmojiClick}/></Box>}
                         
                         <FormControl onKeyDown={handleKeyPress} isRequired mt={3} ml={4} w="98%">
+                            
                             <Input variant="filled" placeholder="Enter a message" onChange={typingHandler} value={newMessage}></Input>
                         </FormControl>
                         <Box alignSelf="flex-end" ml={2} onClick={sendMessage}>

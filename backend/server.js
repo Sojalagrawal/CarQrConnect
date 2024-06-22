@@ -55,20 +55,21 @@ io.on("connection",(socket)=>{
         socket.join(room);
         console.log("User Joined Room " +room);
     })
+
     socket.on("new message",(newMessageRecieved)=>{
-        console.log(newMessageRecieved);
         var chat=newMessageRecieved.chat;
         var senderType=newMessageRecieved.senderType;
         if(senderType=="Guest"){
-            // console.log("sojal",chat.user2._id);
             socket.in(chat.user2).emit("message recieved",newMessageRecieved);
         }
         else{
-            console.log("sojal",chat.user1);
             socket.in(chat.user1).emit("message recieved",newMessageRecieved);
         }
         
     })
+
+    socket.on("typing",(room)=>socket.in(room).emit("typing"));
+    socket.on("stop typing",(room)=>socket.in(room).emit("stop typing"));
 })
 
 
