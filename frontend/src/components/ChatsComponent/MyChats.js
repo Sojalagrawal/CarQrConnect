@@ -24,7 +24,6 @@ export default function MyChats({fetchAgain}) {
 
       const data = await response.json();
       setChats(data);
-      // console.log(data);
     } catch (error) {
       console.log(error);
       toast({
@@ -86,3 +85,7 @@ export default function MyChats({fetchAgain}) {
     </>
   );
 }
+
+// http://localhost:3000/U2FsdGVkX18LvmoLLIId2AR3G878/5jhWlp35v1BILrAQQ2RGb6/F/Tl4cPV1l/V
+// http://localhost:3000/U2FsdGVkX19pDo3swuUq2ZLFmRtT8R4ivAl3ehkMMKuHxlqd9rndyzd81Vvjeh56
+// http://localhost:3000/U2FsdGVkX19pDo3swuUq2ZLFmRtT8R4ivAl3ehkMMKuHxlqd9rndyzd81Vvjeh56
