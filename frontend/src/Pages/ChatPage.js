@@ -20,7 +20,7 @@ const ChatPage = () => {
         setActiveTab('DashBoard');
         break;
       default:
-        setActiveTab('QrCode');
+        setActiveTab('DashBoard');
     }
   };
   const [isSmallScreen] = useMediaQuery('(max-width: 650px)');
@@ -35,7 +35,7 @@ const ChatPage = () => {
           <TabList display="flex" flex="3" justifyContent="space-around">
             <Tab flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">qr_code_2</span> : "QrCode"}</Tab>
             <Tab flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">qr_code_scanner</span> : "Scanner"}</Tab>
-            <Tab flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">chat</span> : "DashBoard"}</Tab>
+            <Tab  flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">chat</span> : "DashBoard"}</Tab>
           </TabList>
         </Flex>
         </Box>

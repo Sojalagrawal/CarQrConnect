@@ -71,29 +71,24 @@ const encryptedId=asyncHandler(async(req,res)=>{
 
 })
 
-const decryptedId=asyncHandler(async(req,res)=>{
-    const {encryptId}=req.body;
+const checkAndDecryptUser = asyncHandler(async (req, res) => {
+    const { encryptId } = req.body;
     const decryptedData = CryptoJS.AES.decrypt(encryptId, process.env.GUEST_KEY).toString(CryptoJS.enc.Utf8);
-    if(decryptedData){
-        return res.status(200).json({decryptedData});
-    }
-    else {
-        res.status(400);
-        throw new Error("Failed to find User");
-    }
-})
 
-const checkUser=asyncHandler(async(req,res)=>{
-    const {userId}=req.body;
-    
-    const userExists=await User.findOne({_id:userId});
-    if(userExists){
-        res.status(200).json({userExists});
-    }
-    else{
+    if (!decryptedData) {
         res.status(400);
-        throw new Error("User Do not exists");
+        throw new Error("Failed to decode ID");
     }
-})
 
-module.exports={registerUser,authUser,decryptedId ,encryptedId,checkUser};
+    const userExists = await User.findOne({ _id: decryptedData });
+    if (userExists) {
+        return res.status(200).json({ userExists });
+    } else {
+        res.status(400);
+        throw new Error("User does not exist");
+    }
+});
+
+
+
+module.exports={registerUser,authUser ,encryptedId,checkAndDecryptUser};

@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, useToast,Text } from "@chakra-ui/react";
 import { useParams, useNavigate } from 'react-router-dom';
+import SingleGuestChat from './SingleGuestChat';
 
 const GuestChat = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { id } = useParams();
   const guestInfo = JSON.parse(localStorage.getItem("guestInfo"));
-  const guestId = guestInfo ? guestInfo._id : null;
   const [userId, setUserId] = useState("");
-  const [validUserId, setValidUserId] = useState(false);
-  const [fetchError, setFetchError] = useState(null);
+  const [selectedChat,setSelectedChat]=useState();
 
   const decodeId = async () => {
+    if(!id){
+      return;
+    }
     try {
       const response = await fetch("http://localhost:5000/api/user/decrypt", {
         method: "POST",
@@ -27,81 +29,63 @@ const GuestChat = () => {
       }
 
       const data = await response.json();
-      console.log(data.decryptedData);
-      setUserId(data.decryptedData);
+      console.log(data.userExists._id);
+      setUserId(data.userExists._id);
     } catch (error) {
-      setFetchError(error.message);
-      // toast({
-      //   title: 'Error Occurred',
-      //   description: error.message || 'An error occurred while decoding the ID',
-      //   status: 'error',
-      //   duration: 3000,
-      //   isClosable: true,
-      //   position: "top-right",
-      // });
-
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 3000); // Wait for the toast to display before navigating away
-      console.error("Decode ID Error:", error);
-    }
-  }
-
-  const checkUserId = async () => {
-    if (!userId) return;
-
-    try {
-      const response = await fetch("http://localhost:5000/api/user/check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: userId }),
+      toast({
+        title: 'Error Occurred',
+        description: error.message || 'An error occurred while decoding the ID',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to find User');
-      }
-
-      const data = await response.json();
-      console.log("User Exists:", data);
-      setValidUserId(true);
-      setFetchError(null); // Clear previous fetch errors if any
-    } catch (error) {
-      setFetchError(error.message);
-      // toast({
-      //   title: 'User Does Not Exist',
-      //   description: error.message || 'An error occurred while checking the user ID',
-      //   status: 'error',
-      //   duration: 3000,
-      //   isClosable: true,
-      //   position: "top-right",
-      // });
-
-      console.error("Check User ID Error:", error);
     }
   }
+
+
+  const accessChat = async () => {
+    if (!userId) return;
+    try {
+        const response = await fetch("http://localhost:5000/api/chat", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${guestInfo.token}`
+            },
+            body: JSON.stringify({
+                userId:userId
+            }),
+
+        });
+
+        const data = await response.json();
+        console.log("selected chat");
+        console.log(data);
+        setSelectedChat(data);
+        console.log(data._id);
+        
+    } catch (error) {
+       console.log(error);
+    }
+};
 
   useEffect(() => {
     decodeId();
   }, []);
 
-  useEffect(() => {
-    if (userId) {
-      checkUserId();
-    }
-  }, [userId]);
 
-  // useEffect(() => {
-  //   if (validUserId) {
-  //     console.log("Valid user detected");
-  //     // Proceed with any other logic if needed when a valid user is detected
-  //   }
-  // }, [validUserId]);
+  useEffect(()=>{
+    if(userId){
+      accessChat();
+    }
+  },[userId]);
+
+  
 
   return (
     <>
-      {validUserId?<Box
+      {userId?<Box
         display="flex"
         height="100vh"
         border="1px solid red"
@@ -113,16 +97,12 @@ const GuestChat = () => {
         borderRadius="lg"
         borderWidth="1px"
       >
-        <Box
-          height="80%"
-          width="80%"
-          bg="red.200"
-          justifyContent="center"
-          alignItems="center"
-        >
-          {/* Add your guest chat UI here */}
+        <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#E8E8E8" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
+           {selectedChat && selectedChat._id && <SingleGuestChat selectedChat={selectedChat}/>}
         </Box>
-      </Box>:<>No User Found</>}
+      </Box>:<Box display="flex" justifyContent="center" alignItems="center" h="100%">
+                    <Text fontSize="3xl" fontFamily="Work sans">No User Found</Text>
+        </Box>}
     </>
   );
 };
