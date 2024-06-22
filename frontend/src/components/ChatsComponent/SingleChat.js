@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, FormControl, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import Picker,{ EmojiClickData } from 'emoji-picker-react';
+import Lottie from "react-lottie";
+import animationData from "../../animations/typing.json";
+
+
 
 import { ChatState } from "../../Context/ChatProvider";
 import ScrollableChat from "./ScrollableChat";
@@ -10,7 +14,7 @@ var socket,selectedChatCompare;
 
 export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     const toast = useToast();
-    const { user } = ChatState();
+    const { user,notification,setNotification } = ChatState();
     const { selectedChat } = ChatState();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -19,6 +23,15 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     const [socketConnected,setSocketConnected]=useState(false);
     const [typing,setTyping]=useState(false);
     const [istyping,setIsTyping]=useState(false);
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: animationData,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
+      };
 
     
 
@@ -119,14 +132,17 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     
 
     
-    
     useEffect(()=>{
         socket.on("message recieved",(newMessageRecieved)=>{
             if(!selectedChatCompare || selectedChatCompare._id!==newMessageRecieved.chat._id){
-                //notification
+                if(!notification.includes(newMessageRecieved)){
+                    setNotification([...notification,newMessageRecieved]);
+                    toggleFetchAgain();
+                }
             }
             else{
                 setMessages([...messages,newMessageRecieved]);
+                toggleFetchAgain();
             }
         })
     })
@@ -188,7 +204,8 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
                             <div style={{display:"flex",flexDirection:"column",overflowY:"scroll"}}>
                                 <ScrollableChat messages={messages} usedBy="User" />
                             </div>
-                            {istyping?<div>Loading</div>:<></>}
+                            {istyping?<div><Lottie width={60} options={defaultOptions} style={{marginLeft:0,marginBottom:15}}/></div>:<></>}
+
                             </>
                         )}
                     </Box>

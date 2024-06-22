@@ -3,6 +3,9 @@ import { Box, FormControl,Divider, Input, Spinner, Text, useToast } from "@chakr
 import Picker,{ EmojiClickData } from 'emoji-picker-react';
 import ScrollableChat from './ScrollableChat';
 import io from "socket.io-client";
+import Lottie from "react-lottie";
+import animationData from "../../animations/typing.json";
+
 
 
 const ENDPOINT="http://localhost:5000";
@@ -18,6 +21,17 @@ export default function SingleGuestChat({ selectedChat }) {
     const [socketConnected,setSocketConnected]=useState(false);
     const [typing,setTyping]=useState(false);
     const [istyping,setIsTyping]=useState(false);
+
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: animationData,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
+      };
+    
 
 
 
@@ -183,7 +197,7 @@ export default function SingleGuestChat({ selectedChat }) {
                             <div style={{ display: "flex", flexDirection: "column", overflowY: "scroll" }}>
                                 {messages.length > 0 && <ScrollableChat messages={messages} usedBy="Guest" />}
                             </div>
-                            {istyping?<div>Loading</div>:<></>}
+                            {istyping?<div><Lottie width={60} options={defaultOptions} style={{marginLeft:0,marginBottom:15}}/></div>:<></>}
                             </>
                         )}
                     </Box>
