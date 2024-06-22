@@ -4,6 +4,9 @@ import Picker,{ EmojiClickData } from 'emoji-picker-react';
 
 import { ChatState } from "../../Context/ChatProvider";
 import ScrollableChat from "./ScrollableChat";
+import io from "socket.io-client";
+const ENDPOINT="http://localhost:5000";
+var socket,selectedChatCompare;
 
 export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     const toast = useToast();
@@ -13,9 +16,55 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState("");
     const [showPicker,setShowPicker]=useState(false);
-
+    const [socketConnected,setSocketConnected]=useState(false);
 
     
+
+    const fetchAllMessages = async () => {
+        if (!selectedChat) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const response = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${user.token}`
+                },
+            });
+
+            const data = await response.json();
+            setMessages(data);
+            setLoading(false);
+            socket.emit("join chat",selectedChat._id);
+        } catch (error) {
+            toast({
+                title: 'Unable to load Messages.',
+                description: error.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            });
+            // console.log(error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(()=>{
+        socket=io(ENDPOINT);
+        socket.emit('setup',user);
+        socket.on("connected",()=>{
+            setSocketConnected(true);
+        })
+    },[]);
+
+    useEffect(() => {
+        fetchAllMessages();
+        selectedChatCompare=selectedChat;
+    }, [selectedChat]);
 
     const sendMessage = async () => {
         if (!newMessage.trim()) return;
@@ -39,6 +88,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
             setMessages([...messages, data]);
             toggleFetchAgain();
             setShowPicker(false);
+            socket.emit("new message",data);
 
             toast({
                 title: 'Message sent successfully.',
@@ -56,39 +106,26 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
                 isClosable: true,
                 position: "top-right",
             });
+            // console.log(error);
         }
     };
 
-    const fetchAllMessages = async () => {
-        if (!selectedChat) {
-            return;
-        }
 
-        try {
-            setLoading(true);
-            const response = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`, {
-                method: "get",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${user.token}`
-                },
-            });
+    
 
-            const data = await response.json();
-            setMessages(data);
-            setLoading(false);
-        } catch (error) {
-            toast({
-                title: 'Unable to load Messages.',
-                description: error.message,
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-                position: "top-right",
-            });
-            setLoading(false);
-        }
-    };
+    
+    
+    useEffect(()=>{
+        socket.on("message recieved",(newMessageRecieved)=>{
+            if(!selectedChatCompare || selectedChatCompare._id!==newMessageRecieved.chat._id){
+                //notification
+            }
+            else{
+                setMessages([...messages,newMessageRecieved]);
+            }
+        })
+    })
+    
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value);
@@ -103,11 +140,6 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
         setNewMessage((ip)=>ip+emojiData.emoji);
     };
     
-
-    useEffect(() => {
-        fetchAllMessages();
-    }, [selectedChat]);
-
     return (
         <>
             {selectedChat ? (

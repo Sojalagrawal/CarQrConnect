@@ -81,7 +81,6 @@ const GuestChat = () => {
     }
   },[userId]);
 
-  
 
   return (
     <>

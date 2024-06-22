@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Box, FormControl, Input, Spinner, Text, useToast } from "@chakra-ui/react";
 import Picker,{ EmojiClickData } from 'emoji-picker-react';
 import ScrollableChat from './ScrollableChat';
+import io from "socket.io-client";
+
+
+const ENDPOINT="http://localhost:5000";
+var socket,selectedChatCompare;
 
 export default function SingleGuestChat({ selectedChat }) {
     const toast = useToast();
@@ -10,6 +15,57 @@ export default function SingleGuestChat({ selectedChat }) {
     const [newMessage, setNewMessage] = useState("");
     const guestInfo = JSON.parse(localStorage.getItem("guestInfo"));
     const [showPicker,setShowPicker]=useState(false);
+    const [socketConnected,setSocketConnected]=useState(false);
+
+
+
+    
+
+    const fetchAllMessages = async () => {
+        if (!selectedChat) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const response = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`, {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${guestInfo.token}`
+                },
+            });
+
+            const data = await response.json();
+            setMessages(data);
+            setLoading(false);
+            socket.emit("join chat",selectedChat._id);
+        } catch (error) {
+            toast({
+                title: 'Unable to load Messages.',
+                description: error.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            });
+            setLoading(false);
+        }
+    };
+
+    useEffect(()=>{
+        socket=io(ENDPOINT);
+        socket.emit('setup',guestInfo);
+        socket.on("connected",()=>{
+            setSocketConnected(true);
+        })
+    },[]);
+
+    useEffect(() => {
+        fetchAllMessages();
+        selectedChatCompare=selectedChat;
+    }, [selectedChat]);
+   
 
 
     const sendMessage = async () => {
@@ -32,6 +88,7 @@ export default function SingleGuestChat({ selectedChat }) {
             const data = await response.json();
             setNewMessage("");
             setMessages([...messages, data]);
+            socket.emit("new message",data);
 
             toast({
                 title: 'Message sent successfully.',
@@ -40,6 +97,7 @@ export default function SingleGuestChat({ selectedChat }) {
                 isClosable: true,
                 position: "top-right",
             });
+            
         } catch (error) {
             toast({
                 title: 'Unable to send Message.',
@@ -52,36 +110,17 @@ export default function SingleGuestChat({ selectedChat }) {
         }
     };
 
-    const fetchAllMessages = async () => {
-        if (!selectedChat) {
-            return;
-        }
 
-        try {
-            setLoading(true);
-            const response = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`, {
-                method: "get",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${guestInfo.token}`
-                },
-            });
+    useEffect(()=>{
+        socket.on("message recieved",(newMessageRecieved)=>{
+            setMessages([...messages,newMessageRecieved]);
+            
+        })
+    })
 
-            const data = await response.json();
-            setMessages(data);
-            setLoading(false);
-        } catch (error) {
-            toast({
-                title: 'Unable to load Messages.',
-                description: error.message,
-                status: 'error',
-                duration: 3000,
-                isClosable: true,
-                position: "top-right",
-            });
-            setLoading(false);
-        }
-    };
+
+
+
     const onEmojiClick = (emojiData:EmojiClickData) => {
         setNewMessage((ip)=>ip+emojiData.emoji);
     };
@@ -96,10 +135,7 @@ export default function SingleGuestChat({ selectedChat }) {
         }
     };
 
-    useEffect(() => {
-        fetchAllMessages();
-    }, [selectedChat]);
-
+    
     return (
         <>
             {selectedChat ? (

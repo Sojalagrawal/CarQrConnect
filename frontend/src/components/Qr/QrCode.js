@@ -20,7 +20,7 @@ export default function QrCode() {
       });
 
       const data = await response.json();
-      console.log("Encrypted ID from API:", data.encryptedUserId);
+      // console.log("Encrypted ID from API:", data.encryptedUserId);
       setId(data.encryptedUserId); 
 
     } catch (error) {

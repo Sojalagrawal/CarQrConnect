@@ -33,7 +33,44 @@ app.use('/api/message',messageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT,console.log(`Server Started on port ${PORT}`.yellow.bold));
+const server=app.listen(PORT,console.log(`Server Started on port ${PORT}`.yellow.bold));
+const io=require("socket.io")(server,{
+    pingTimeout:60000, //ms-->  amount of time it will wait while being inactive-->for 60s if user do not send mssg it close the connection to save bandwidth
+    cors:{
+        origin:"http://localhost:3000",
+    }
+});
+
+
+io.on("connection",(socket)=>{
+    console.log("Connected to socket.io");
+
+    socket.on('setup',(userData)=>{
+        socket.join(userData._id);
+        console.log(userData._id);
+        socket.emit("connected");
+    })
+
+    socket.on("join chat",(room)=>{
+        socket.join(room);
+        console.log("User Joined Room " +room);
+    })
+    socket.on("new message",(newMessageRecieved)=>{
+        console.log(newMessageRecieved);
+        var chat=newMessageRecieved.chat;
+        var senderType=newMessageRecieved.senderType;
+        if(senderType=="Guest"){
+            // console.log("sojal",chat.user2._id);
+            socket.in(chat.user2).emit("message recieved",newMessageRecieved);
+        }
+        else{
+            console.log("sojal",chat.user1);
+            socket.in(chat.user1).emit("message recieved",newMessageRecieved);
+        }
+        
+    })
+})
+
 
 
 
