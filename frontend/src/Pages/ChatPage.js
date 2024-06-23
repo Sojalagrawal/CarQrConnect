@@ -33,9 +33,9 @@ const ChatPage = () => {
         <Flex justifyContent="space-between" alignItems="center" width="100%">
           <Text flex="1" textAlign="center"fontWeight="bold" fontSize={{base:"16px",md:"20px"}} ml="4px">CarQrConnect</Text>
           <TabList display="flex" flex="3" justifyContent="space-around">
-            <Tab flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">qr_code_2</span> : "QrCode"}</Tab>
-            <Tab flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">qr_code_scanner</span> : "Scanner"}</Tab>
-            <Tab  flex="1" textAlign="center">{isSmallScreen ? <span class="material-symbols-outlined">chat</span> : "DashBoard"}</Tab>
+            <Tab flex="1" textAlign="center">{isSmallScreen ? <span className="material-symbols-outlined">qr_code_2</span> : "QrCode"}</Tab>
+            <Tab flex="1" textAlign="center">{isSmallScreen ? <span className="material-symbols-outlined">qr_code_scanner</span> : "Scanner"}</Tab>
+            <Tab  flex="1" textAlign="center">{isSmallScreen ? <span className="material-symbols-outlined">chat</span> : "DashBoard"}</Tab>
           </TabList>
         </Flex>
         </Box>

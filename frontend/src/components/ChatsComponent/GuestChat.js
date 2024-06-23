@@ -3,7 +3,9 @@ import { Box, useToast,Text } from "@chakra-ui/react";
 import { useParams, useNavigate } from 'react-router-dom';
 import SingleGuestChat from './SingleGuestChat';
 
-const GuestChat = () => {
+
+
+const GuestChat = ({flag,setFlag}) => {
   const navigate = useNavigate();
   const toast = useToast();
   const { id } = useParams();
@@ -97,7 +99,7 @@ const GuestChat = () => {
         borderWidth="1px"
       >
         <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#fae0de" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
-           {selectedChat && selectedChat._id && <SingleGuestChat selectedChat={selectedChat}/>}
+           {selectedChat && selectedChat._id && <SingleGuestChat selectedChat={selectedChat} flag={flag} setFlag={setFlag}/>}
         </Box>
       </Box>:<Box display="flex" justifyContent="center" alignItems="center" h="100%">
                     <Text fontSize="3xl" fontFamily="Work sans">No User Found</Text>
@@ -107,3 +109,44 @@ const GuestChat = () => {
 };
 
 export default GuestChat;
+
+
+
+
+
+
+
+
+
+
+
+// utils/tokenUtils.js
+// const isTokenExpired = (token) => {
+//   if (!token) return true;
+
+//   const decodedToken = JSON.parse(atob(token.split('.')[1]));
+//   const expiryTime = decodedToken.exp * 1000;
+//   return Date.now() >= expiryTime;
+// };
+// const removeTokenIfExpired = () => {
+//   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+//   if (userInfo && isTokenExpired(userInfo.token)) {
+//       localStorage.removeItem("guestInfo");
+//       return true;
+//   }
+
+//   return false;
+// };
+
+
+// useEffect(() => {
+//   const isExpired = removeTokenIfExpired();
+//   if (isExpired) {
+//       navigate("/");
+//   }
+//   else{
+//       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+//       setUser(userInfo);
+//   }
+// },[navigate]);

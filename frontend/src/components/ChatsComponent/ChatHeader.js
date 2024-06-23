@@ -33,7 +33,7 @@ export default function ChatHeader() {
                   {notification.map((notif)=>(
                     <MenuItem key={notif._id} onClick={()=>{
                       setSelectedChat(notif.chat);
-                      setNotification(notification.filter((n)=>n!==notif)); //remove notification
+                      setNotification(notification.filter((n)=>n.chat._id!==notif.chat._id)); //remove notification
                     }}>
                       New Message from Notifier
                     </MenuItem>

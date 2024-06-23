@@ -202,7 +202,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
                         ) : (
                             <>
                             <div style={{display:"flex",flexDirection:"column",overflowY:"scroll"}}>
-                                <ScrollableChat messages={messages} usedBy="User" />
+                                <ScrollableChat messages={messages} usedBy="User" user={user}/>
                             </div>
                             {istyping?<div><Lottie width={60} options={defaultOptions} style={{marginLeft:0,marginBottom:15}}/></div>:<></>}
 

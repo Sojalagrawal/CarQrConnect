@@ -11,14 +11,13 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <ChatProvider>
+        
           <Routes>
-            <Route path="/chats" element={<ChatPage/>} exact/>
+            <Route path="/chats" element={<ChatProvider><ChatPage/></ChatProvider>} exact/>
             <Route path="/:id" element={<GuestPage/>} exact/>
-            <Route path="/" element={<Homepage/>} exact/>
-            {/* <Route path="/guestchat" element={<GuestChat/>} exact/> */}
+            <Route path="/" element={<ChatProvider><Homepage/></ChatProvider>} exact/>
           </Routes>
-        </ChatProvider>
+        
       </BrowserRouter>
     </div>
   );

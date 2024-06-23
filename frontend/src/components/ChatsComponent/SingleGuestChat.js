@@ -11,7 +11,7 @@ import animationData from "../../animations/typing.json";
 const ENDPOINT="http://localhost:5000";
 var socket;
 
-export default function SingleGuestChat({ selectedChat }) {
+export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
     const toast = useToast();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -35,7 +35,10 @@ export default function SingleGuestChat({ selectedChat }) {
 
 
 
-    
+    const logoutHandler=()=>{
+        localStorage.removeItem("guestInfo");
+        setFlag(!flag);
+    }
 
     const fetchAllMessages = async () => {
         if (!selectedChat) {
@@ -192,10 +195,17 @@ export default function SingleGuestChat({ selectedChat }) {
                             />
                         ) : (
                             <>
-                            <Box display="flex" justifyContent="center" alignItems="center"><Text fontSize="30px" fontWeight="bold">Car Owner</Text></Box>
+                            <Box display="flex" justifyContent="space-between" >
+                                <spacer/>
+                                <Box display="flex" justifyContent="center" alignItems="center"><Text fontSize="30px" fontWeight="bold">Car Owner</Text></Box>
+                                <Box alignSelf="flex-end" cursor="pointer" onClick={logoutHandler}><span class="material-symbols-outlined">
+                                        logout
+                                </span>
+                                </Box>
+                            </Box>
                             <Divider borderColor="black" />
                             <div style={{ display: "flex", flexDirection: "column", overflowY: "scroll" }}>
-                                {messages.length > 0 && <ScrollableChat messages={messages} usedBy="Guest" />}
+                                {messages.length > 0 && <ScrollableChat messages={messages} usedBy="Guest" user={guestInfo}/>}
                             </div>
                             {istyping?<div><Lottie width={60} options={defaultOptions} style={{marginLeft:0,marginBottom:15}}/></div>:<></>}
                             </>
