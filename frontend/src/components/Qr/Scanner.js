@@ -1,3 +1,4 @@
+import { Text } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import QrScanner from 'react-qr-scanner';
 
@@ -47,13 +48,13 @@ const Scanner = () => {
   }, [result]);
 
   const previewStyle = {
-    height: 320,
-    width: 320,
+    height: 420,
+    width: 330,
   };
 
   return (
     <div>
-      <h2>QR Code Scanner</h2>
+      <Text fontWeight="bold" fontSize={{ base: "20px", md: "25px", lg: "27px", xl: "29px" }}>QR Code Scanner</Text>
       {isScannerActive && (
         <QrScanner
           delay={300}
