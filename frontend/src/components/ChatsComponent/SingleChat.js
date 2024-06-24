@@ -33,6 +33,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
         }
       };
 
+   
     
 
     const fetchAllMessages = async () => {
@@ -71,12 +72,25 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
     useEffect(()=>{
         socket=io(ENDPOINT);
         socket.emit('setup',user);
-        socket.on("connected",()=>{
-            setSocketConnected(true);
-            socket.on("typing",()=>{setIsTyping(true)});
-            socket.on("stop typing",()=>{setIsTyping(false)});
-        })
+        socket.on("connected",()=>{setSocketConnected(true)});
+        socket.on("typing",(room)=>{
+            
+            if(selectedChatCompare && room===selectedChatCompare._id){
+                setIsTyping(true);
+            }
+            
+            
+        });
+        socket.on("stop typing",(room)=>{
+            if(selectedChatCompare && room===selectedChatCompare._id){
+                setIsTyping(false);
+            }
+            
+        });
+        
     },[]);
+
+    
 
     useEffect(() => {
         fetchAllMessages();

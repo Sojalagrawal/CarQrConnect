@@ -75,11 +75,17 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
     useEffect(()=>{
         socket=io(ENDPOINT);
         socket.emit('setup',guestInfo);
-        socket.on("connected",()=>{
-            setSocketConnected(true);
-            socket.on("typing",()=>{setIsTyping(true)});
-            socket.on("stop typing",()=>{setIsTyping(false)});
-        })
+        socket.on("connected",()=>{setSocketConnected(true)});
+        socket.on("typing",(room)=>{
+            if(selectedChat && room===selectedChat._id){
+                setIsTyping(true);
+            }
+        });
+        socket.on("stop typing",(room)=>{
+            if(selectedChat && room===selectedChat._id){
+                setIsTyping(false);
+            }
+        });
     },[]);
 
     useEffect(() => {
@@ -148,8 +154,10 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
 
     const typingHandler = (e) => {
         setNewMessage(e.target.value);
+        
 
-        if(!socketConnected){
+        //Typing Indicator Logic
+        if(!socketConnected){ //if socket npt connected return
             return;
         }
 
@@ -181,6 +189,15 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
         <>
             {selectedChat ? (
                 <>
+                    <Box  display="flex" justifyContent="space-between" >
+                        <spacer/>
+                        <Box display="flex" justifyContent="center" alignItems="center"><Text fontSize="30px" fontWeight="bold">Car Owner</Text></Box>
+                        <Box alignSelf="flex-end" cursor="pointer" onClick={logoutHandler}><span class="material-symbols-outlined">
+                                logout
+                        </span>
+                        </Box>
+                    </Box>
+                    <Divider borderColor="black" />
                     <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#E8E8E8" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
                         {loading ? (
                             <Spinner
@@ -195,19 +212,13 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
                             />
                         ) : (
                             <>
-                            <Box display="flex" justifyContent="space-between" >
-                                <spacer/>
-                                <Box display="flex" justifyContent="center" alignItems="center"><Text fontSize="30px" fontWeight="bold">Car Owner</Text></Box>
-                                <Box alignSelf="flex-end" cursor="pointer" onClick={logoutHandler}><span class="material-symbols-outlined">
-                                        logout
-                                </span>
-                                </Box>
+                            
+                            <Box>
+                                <div style={{ display: "flex", flexDirection: "column", overflowY: "scroll" }}>
+                                    {messages.length > 0 && <ScrollableChat messages={messages} usedBy="Guest" user={guestInfo}/>}
+                                </div>
+                                {istyping?<div><Lottie width={60} options={defaultOptions} style={{marginLeft:0,marginBottom:15}}/></div>:<></>}
                             </Box>
-                            <Divider borderColor="black" />
-                            <div style={{ display: "flex", flexDirection: "column", overflowY: "scroll" }}>
-                                {messages.length > 0 && <ScrollableChat messages={messages} usedBy="Guest" user={guestInfo}/>}
-                            </div>
-                            {istyping?<div><Lottie width={60} options={defaultOptions} style={{marginLeft:0,marginBottom:15}}/></div>:<></>}
                             </>
                         )}
                     </Box>
@@ -227,7 +238,7 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
                 </>
             ) : (
                 <Box display="flex" justifyContent="center" alignItems="center" h="100%">
-                    <Text fontSize="3xl" fontFamily="Work sans">Click on Informer to start Chatting</Text>
+                    <Text fontSize="3xl" fontFamily="Work sans">No Car Owner Selected</Text>
                 </Box>
             )}
         </>
