@@ -33,27 +33,6 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
         }
       };
 
-    //   const sendSMS=async()=>{
-
-    //         try {
-    //             const num=selectedChat.user1.phnNo;
-    //             const url=window.location.href;
-    //             const response = await fetch("http://localhost:5000/api/message/sendSMS", {
-    //                 method: "post",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     "Authorization": `Bearer ${user.token}`
-    //                 },
-    //                 body: JSON.stringify({
-    //                     body: `You have recieved message from a Car Owner : ${url}}`,
-    //                     To:"+91"+num.toString()
-    //                 }),
-    //             });
-    
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //   }
     
 
     const fetchAllMessages = async () => {
@@ -141,7 +120,6 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
             toggleFetchAgain();
             setShowPicker(false);
             socket.emit("new message",data);
-            // sendSMS();
 
             toast({
                 title: 'Message sent successfully.',

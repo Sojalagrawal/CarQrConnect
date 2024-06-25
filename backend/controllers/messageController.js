@@ -2,12 +2,6 @@ const asyncHandler = require("express-async-handler");
 const Guest = require('../models/guestUser');
 const Message = require('../models/messageModel');
 const Chat = require('../models/chatModel');
-// const accoundSid = process.env.Account_SID;
-// const authToken = process.env.Auth_Token;
-
-
-
-// const client = require('twilio')(accoundSid, authToken);
 
 
 
@@ -15,28 +9,7 @@ const Chat = require('../models/chatModel');
 
 
 
-// const sendSMS=asyncHandler(async(req,res)=>{
-//     const {body,To}=req.body;
-//     if(!body || !To){
-//         console.log("Invalid data passed into request");
-//         return res.sendStatus(400);
-//     }
-//     let msgOptions={
-//         from:process.env.FROM_PHN_NO,
-//         to:To,
-//         body,
-//     };
-//     try{
-//         const message=await client.messages.create(msgOptions);
-//         console.log(message);
-//         res.sendStatus(200);
-//     }
-//     catch(error){
-//         res.sendStatus(400);
-//         console.log(error);
-//     }
 
-// })
 const sendMessage=asyncHandler(async(req,res)=>{
     const {content,chatId,senderType}=req.body;
     if(!content || !chatId || !senderType){
