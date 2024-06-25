@@ -50,13 +50,13 @@ export default function MyChats({fetchAgain}) {
         flexDirection="column"
         alignItems="center"
         p={3}
-        bg="white"
+        bg="#FFE4C4"
         w={{ base: "100%", md: "31%" }}
         borderRadius="lg"
         borderWidth="1px"
       >
         <Box>
-          My Chats
+          <strong>My Chats</strong>
         </Box>
         <Box display="flex" flexDirection="column" p={3} bg="#F8F8F8" w="100%" h="95%" borderRadius="lg" overflowY="hidden">
           {chats && chats.length ? (
@@ -66,7 +66,7 @@ export default function MyChats({fetchAgain}) {
                   key={chat._id}
                   onClick={() => setSelectedChat(chat)}
                   cursor="pointer"
-                  bg={selectedChat === chat ? "#38B2Ac" : "#E8E8E8"}
+                  bg={selectedChat === chat ? "#8FCADC" : "#E8E8E8"}
                   color={selectedChat === chat ? "black" : "black"}
                   px={3}
                   py={2}
@@ -85,7 +85,3 @@ export default function MyChats({fetchAgain}) {
     </>
   );
 }
-
-// http://localhost:3000/U2FsdGVkX18LvmoLLIId2AR3G878/5jhWlp35v1BILrAQQ2RGb6/F/Tl4cPV1l/V
-// http://localhost:3000/U2FsdGVkX19pDo3swuUq2ZLFmRtT8R4ivAl3ehkMMKuHxlqd9rndyzd81Vvjeh56
-// http://localhost:3000/U2FsdGVkX19pDo3swuUq2ZLFmRtT8R4ivAl3ehkMMKuHxlqd9rndyzd81Vvjeh56

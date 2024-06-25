@@ -21,7 +21,7 @@ export default function Dashboard() {
 
     return (
         <div style={{ width: "100%"}}>
-            <Box  bg="#BAC8D3">
+            <Box  bg="#F4C0B4" border="1px solid black">
                 {user && <ChatHeader />}   
                 <Box 
                     display="flex" 

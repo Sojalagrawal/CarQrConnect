@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, useToast,Text } from "@chakra-ui/react";
+import { Box, useToast,Text,Divider } from "@chakra-ui/react";
 import { useParams, useNavigate } from 'react-router-dom';
 import SingleGuestChat from './SingleGuestChat';
 
@@ -13,6 +13,12 @@ const GuestChat = ({flag,setFlag}) => {
   const [userId, setUserId] = useState("");
   const [selectedChat,setSelectedChat]=useState();
 
+
+ 
+  const logoutHandler=()=>{
+    localStorage.removeItem("guestInfo");
+    setFlag(!flag);
+ }
   const decodeId = async () => {
     if(!id){
       return;
@@ -89,7 +95,7 @@ const GuestChat = ({flag,setFlag}) => {
       {userId?<Box
         display="flex"
         height="100vh"
-        border="1px solid red"
+        border="1px solid black"
         justifyContent="center"
         alignItems="center"
         flexDir="column"
@@ -98,6 +104,12 @@ const GuestChat = ({flag,setFlag}) => {
         borderRadius="lg"
         borderWidth="1px"
       >
+        <Box  display="flex" justifyContent="space-between" width="100%">
+            <spacer/>
+            <Box display="flex" justifyContent="center" alignItems="center"><Text fontSize="30px" fontWeight="bold">Car Owner</Text></Box>
+            <Box alignSelf="flex-end" cursor="pointer" onClick={logoutHandler}><span class="material-symbols-outlined">logout</span></Box>
+        </Box>
+        <Divider borderColor="black" />
         <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#fae0de" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
            {selectedChat && selectedChat._id && <SingleGuestChat selectedChat={selectedChat} flag={flag} setFlag={setFlag}/>}
         </Box>
@@ -120,7 +132,7 @@ export default GuestChat;
 
 
 
-// utils/tokenUtils.js
+
 // const isTokenExpired = (token) => {
 //   if (!token) return true;
 

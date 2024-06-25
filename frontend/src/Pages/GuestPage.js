@@ -2,12 +2,9 @@ import React,{useEffect,useState} from 'react';
 import { Container, Box, Text } from "@chakra-ui/react";
 import GuestLogin from '../components/Authentication/GuestLogin';
 import GuestChat from '../components/ChatsComponent/GuestChat';
-// import {useNavigate} from 'react-router-dom';
 
 
 export default function GuestPage() {
-  // const navigate = useNavigate();
-
   const [flag,setFlag]=useState(false);
 
       

@@ -15,7 +15,8 @@ export default function ChatHeader() {
     }
 
     return (
-        <Box display="flex" justifyContent="space-between" width="100%" border="1px solid green" alignItems="center" bg="white" height="5vh">
+      
+        <Box display="flex" justifyContent="space-between" width="100%" border="1px solid black" alignItems="center" bg="#ECDAE0" height="5vh">
             <Spacer/>
               <Menu>
                 <MenuButton mr="20px" position="relative">
@@ -42,7 +43,7 @@ export default function ChatHeader() {
               </Menu>
               <Menu>
                 <MenuButton height={{base:"21px",md:"26px"}} width={{base:"70px",md:"80px",lg:"90px"}} as={Button} rightIcon={<ChevronDownIcon/>} mr="10px">
-                    <Avatar size={{base:"xs",lg:"sm"}} cursor="pointer" name={user.name}/>
+                    <Avatar size={{base:"xs",lg:"sm"}} cursor="pointer" name={user.name} bg="red"/>
                 </MenuButton>
                 <MenuList>
                     <MenuItem><Profile user={user}/></MenuItem>
@@ -50,11 +51,7 @@ export default function ChatHeader() {
                     <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                 </MenuList>
               </Menu>
-              
-                
-           
-            
-            
         </Box>
+        
     );
 }
