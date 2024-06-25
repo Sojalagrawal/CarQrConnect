@@ -10,7 +10,6 @@ export default function QrCode() {
   const [id, setId] = useState("");
   const [baseUrl, setBaseUrl] = useState("");
   const [fullUrl, setFullUrl] = useState("");
-  const [size, setSize] = useState(256);
   const [bgColor, setBgColor] = useState("white");
   const [textColor, setTextColor] = useState("black");
   const [subText, setSubText] = useState("");

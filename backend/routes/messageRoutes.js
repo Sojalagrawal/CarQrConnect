@@ -8,7 +8,7 @@ const { protect } = require('../middleware/authMiddleware');
 
 router.route('/').post(protect,sendMessage);
 router.route('/:chatId').get(protect,allMessages);
-
+// router.route("/sendSMS").post(protect,sendSMS);
 
 
 module.exports=router;

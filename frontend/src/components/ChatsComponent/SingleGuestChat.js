@@ -12,6 +12,7 @@ const ENDPOINT="http://localhost:5000";
 var socket;
 
 export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
+    
     const toast = useToast();
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -32,9 +33,28 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
           preserveAspectRatio: 'xMidYMid slice'
         }
       };
+
+
+    //   const sendSMS=async()=>{
+
+    //         try {
+    //             const num=selectedChat.user2.phnNo;
+    //             const response = await fetch("http://localhost:5000/api/message/sendSMS", {
+    //                 method: "post",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     "Authorization": `Bearer ${guestInfo.token}`
+    //                 },
+    //                 body: JSON.stringify({
+    //                     body: "You have recieved message from a notifier.Login to app to reply",
+    //                     To:"+91"+num.toString()
+    //                 }),
+    //             });
     
-
-
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //   }
 
 
     const fetchAllMessages = async () => {
@@ -114,6 +134,7 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
             setNewMessage("");
             setMessages([...messages, data]);
             socket.emit("new message",data);
+            // sendSMS();
 
             toast({
                 title: 'Message sent successfully.',
@@ -138,6 +159,7 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
 
     useEffect(()=>{
         socket.on("message recieved",(newMessageRecieved)=>{
+
             setMessages([...messages,newMessageRecieved]); 
         })
     })
