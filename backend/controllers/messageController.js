@@ -2,8 +2,8 @@ const asyncHandler = require("express-async-handler");
 const Guest = require('../models/guestUser');
 const Message = require('../models/messageModel');
 const Chat = require('../models/chatModel');
-// const accoundSid = "AC0a7393093481cdc12fa86bc69bd5f7ec";
-// const authToken = "e85b108b185e073a2eff89112b5723a0";
+// const accoundSid = process.env.Account_SID;
+// const authToken = process.env.Auth_Token;
 
 
 
