@@ -9,7 +9,7 @@ import animationData from "../../animations/typing.json";
 import { ChatState } from "../../Context/ChatProvider";
 import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
-const ENDPOINT="http://localhost:5000";
+const ENDPOINT="";
 var socket,selectedChatCompare;
 
 export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
@@ -42,7 +42,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
 
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`, {
+            const response = await fetch(`/api/message/${selectedChat._id}`, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export default function SingleChat({ fetchAgain, toggleFetchAgain }) {
         socket.emit("stop typing",selectedChat._id);
 
         try {
-            const response = await fetch("http://localhost:5000/api/message", {
+            const response = await fetch("/api/message", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",

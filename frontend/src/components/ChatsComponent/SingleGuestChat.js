@@ -8,7 +8,7 @@ import animationData from "../../animations/typing.json";
 
 
 
-const ENDPOINT="http://localhost:5000";
+const ENDPOINT="";
 var socket;
 
 export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
@@ -45,7 +45,7 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
 
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`, {
+            const response = await fetch(`/api/message/${selectedChat._id}`, {
                 method: "get",
                 headers: {
                     "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export default function SingleGuestChat({ selectedChat,setFlag,flag }) {
 
 
         try {
-            const response = await fetch("http://localhost:5000/api/message", {
+            const response = await fetch("/api/message", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",

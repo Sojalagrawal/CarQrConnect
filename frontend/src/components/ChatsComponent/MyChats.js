@@ -14,7 +14,7 @@ export default function MyChats({fetchAgain}) {
       return; // Ensure user and token exist before making API call
     }
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "get",
         headers: {
           "Content-Type": "application/json",

@@ -19,7 +19,7 @@ export default function QrCode() {
 
   const fetchId = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/user/encrypt", {
+      const response = await fetch("/api/user/encrypt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

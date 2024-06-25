@@ -47,7 +47,7 @@ export default function GuestLogin({flag,setFlag}) {
         }
         
         try{
-            const response = await fetch("http://localhost:5000/api/guest", {
+            const response = await fetch("/api/guest", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",

@@ -48,6 +48,8 @@ const SignUp = () => {
 
     const submitHandler=async()=>{
         setLoading(true);
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+
         if(!name || !phnno || !password || !confirmpassword){
             toast({
                 title: 'Please fill all the Fields.',
@@ -72,6 +74,17 @@ const SignUp = () => {
             setLoading(false);
             return;
         }
+        if (!passwordPattern.test(password)) {
+            toast({
+                title: 'Password must be at least 12 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special symbol.',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+                position: "top-right",
+            });
+            setLoading(false);
+            return;
+        }
         if(password!==confirmpassword){
             toast({
                 title: 'Passwords Do Not Match.',
@@ -85,7 +98,7 @@ const SignUp = () => {
             return;
         }
         try{
-            const response = await fetch("http://localhost:5000/api/user", {
+            const response = await fetch("/api/user", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",

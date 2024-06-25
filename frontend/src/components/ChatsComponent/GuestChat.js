@@ -24,7 +24,7 @@ const GuestChat = ({flag,setFlag}) => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:5000/api/user/decrypt", {
+      const response = await fetch("/api/user/decrypt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const GuestChat = ({flag,setFlag}) => {
   const accessChat = async () => {
     if (!userId) return;
     try {
-        const response = await fetch("http://localhost:5000/api/chat", {
+        const response = await fetch("/api/chat", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
