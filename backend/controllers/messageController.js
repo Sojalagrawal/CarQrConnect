@@ -3,13 +3,6 @@ const Guest = require('../models/guestUser');
 const Message = require('../models/messageModel');
 const Chat = require('../models/chatModel');
 
-
-
-
-
-
-
-
 const sendMessage=asyncHandler(async(req,res)=>{
     const {content,chatId,senderType}=req.body;
     if(!content || !chatId || !senderType){
